@@ -1,54 +1,40 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CS_Supplies - Córdoba</title>
-    <!-- Tailwind CSS para un diseño moderno y responsive -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Estilos personalizados suaves */
-        body { font-family: system-ui, -apple-system, sans-serif; }
-        .product-card:hover img { transform: scale(1.03); }
-    </style>
-</head>
-<body class="bg-gray-50 text-gray-800">
-
+<!-- ... existing code ... -->
     <!-- Encabezado y Buscador -->
     <header class="bg-white shadow-sm sticky top-0 z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div>
+            <div class="flex items-center gap-3 text-center sm:text-left">
                 <img 
                     src="logo/CS_Supplies.png" 
                     alt="Logo CS_Supplies" 
                     class="h-12 w-auto object-contain rounded-lg"
-                    <svg class="w-5 h-5 text-gray-400 absolute left-3 top-2.5" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
-                <h1 class="text-2xl font-bold text-gray-900 tracking-tight">CS_Supplies - Córdoba</h1>
-                <p id="counterText" class="text-xs text-gray-500 mt-0.5"></p>
+                    onerror="this.style.display='none'"
+                >
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900 tracking-tight">CS_Supplies - Córdoba</h1>
+                    <p id="counterText" class="text-xs text-gray-500 mt-0.5"></p>
+                </div>
             </div>
 
             <!-- Enlace a Acerca de mí -->
-                <a 
-                    href="acerca.html" 
-                    class="w-full sm:w-auto text-center text-sm font-medium text-gray-600 hover:text-blue-600 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors whitespace-nowrap"
-                >
-                    Acerca de mí
-                </a>
+            <a 
+                href="acerca.html" 
+                class="w-full sm:w-auto text-center text-sm font-medium text-gray-600 hover:text-blue-600 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors whitespace-nowrap"
+            >
+                Acerca de mí
+            </a>
 
             <!-- Boton Whatsapp -->
             <a 
-                    href="https://wa.me/5493513998168?text=Buenos%20dias%2C%20me%20interesa%20el%20lote%20Nro%20" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium px-4 py-2 rounded-lg shadow-sm transition-colors whitespace-nowrap"
-                >
-                    <svg class="w-5 h-5 fill-current shrink-0" width="20" height="20" viewBox="0 0 24 24">
-                        <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm.029 18.88c-1.161 0-2.305-.292-3.318-.844l-3.677.964.984-3.595c-.607-1.052-.927-2.246-.926-3.468.001-3.825 3.113-6.937 6.937-6.937 1.856.001 3.598.723 4.907 2.034 1.31 1.311 2.031 3.054 2.03 4.908-.001 3.825-3.113 6.938-6.937 6.938z"/>
-                    </svg>
-                    <span>Contactar</span>
-                </a>
+                href="https://wa.me/5493513998168?text=Buenos%20dias%2C%20me%20interesa%20el%20lote%20Nro%20" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium px-4 py-2 rounded-lg shadow-sm transition-colors whitespace-nowrap"
+            >
+                <svg class="w-5 h-5 fill-current shrink-0" width="20" height="20" viewBox="0 0 24 24">
+                    <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm.029 18.88c-1.161 0-2.305-.292-3.318-.844l-3.677.964.984-3.595c-.607-1.052-.927-2.246-.926-3.468.001-3.825 3.113-6.937 6.937-6.937 1.856.001 3.598.723 4.907 2.034 1.31 1.311 2.031 3.054 2.03 4.908-.001 3.825-3.113 6.938-6.937 6.938z"/>
+                </svg>
+                <span>Contactar</span>
+            </a>
 
             <!-- Barra de Búsqueda-->
             <div class="w-full sm:w-80 relative">
@@ -63,52 +49,48 @@
                 </svg>
             </div>
         </div>
+
+        <!-- Barra de Solapas (Categorías) -->
+        <div class="border-t border-gray-200 bg-gray-50/60">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <nav class="flex space-x-2 sm:space-x-6 overflow-x-auto" aria-label="Categorías">
+                    <button 
+                        type="button"
+                        data-tab="M" 
+                        onclick="selectTab('M')"
+                        class="tab-btn whitespace-nowrap py-3 px-3 border-b-2 font-semibold text-sm transition-colors border-blue-600 text-blue-600 flex items-center gap-2"
+                    >
+                        <span>Monedas</span>
+                        <span id="count-M" class="bg-blue-100 text-blue-700 text-xs py-0.5 px-2 rounded-full">0</span>
+                    </button>
+
+                    <button 
+                        type="button"
+                        data-tab="B" 
+                        onclick="selectTab('B')"
+                        class="tab-btn whitespace-nowrap py-3 px-3 border-b-2 font-medium text-sm transition-colors border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 flex items-center gap-2"
+                    >
+                        <span>Billetes</span>
+                        <span id="count-B" class="bg-gray-200 text-gray-700 text-xs py-0.5 px-2 rounded-full">0</span>
+                    </button>
+
+                    <button 
+                        type="button"
+                        data-tab="OTROS" 
+                        onclick="selectTab('OTROS')"
+                        class="tab-btn whitespace-nowrap py-3 px-3 border-b-2 font-medium text-sm transition-colors border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 flex items-center gap-2"
+                    >
+                        <span>Otros Coleccionables</span>
+                        <span id="count-OTROS" class="bg-gray-200 text-gray-700 text-xs py-0.5 px-2 rounded-full">0</span>
+                    </button>
+                </nav>
+            </div>
+        </div>
     </header>
-
-    <!-- Contenedor Principal -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <!-- Mensaje de carga o error -->
-        <div id="statusMessage" class="text-center py-12 text-gray-500">
-            Cargando catálogo...
-        </div>
-
-        <!-- Grilla de Productos -->
-        <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 hidden">
-            <!-- Las tarjetas se generarán aquí con JavaScript -->
-        </div>
-    </main>
-
-    <!-- Modal para ver imagen en grande -->
-    <div id="imageModal" class="fixed inset-0 bg-black/80 z-50 hidden items-center justify-center p-4" onclick="closeModal()">
-        <div class="relative max-w-4xl w-full bg-white rounded-xl overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
-            <button onclick="closeModal()" class="absolute top-3 right-3 bg-white/90 hover:bg-white text-gray-800 rounded-full p-2 shadow-md transition">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-            <div class="bg-gray-100 flex items-center justify-center max-h-[75vh] overflow-hidden">
-                <img id="modalImg" src="" alt="Vista ampliada" class="max-h-[75vh] w-auto object-contain">
-            </div>
-            <div class="p-4 bg-white flex justify-between items-center gap-4">
-                <div>
-                    <span id="modalNro" class="text-xs font-bold uppercase tracking-wider text-blue-600"></span>
-                    <p id="modalDesc" class="text-gray-900 font-medium text-sm sm:text-base"></p>
-                </div>
-                <span id="modalPrice" class="text-xl font-bold text-gray-900 whitespace-nowrap"></span>
-            </div>
-        </div>
-    </div>
-
-    <!-- Pie de página -->
-    <footer class="bg-white border-t border-gray-200 mt-12 py-6 text-center text-sm text-gray-500">
-        <p>Actualizado automáticamente desde nuestro inventario.</p>
-        <div class="mt-2">
-            <a href="vendidos.html" class="text-xs text-gray-400 hover:text-gray-600 transition-colors">
-                Acceso Administración
-            </a>
-        </div>
-    </footer>
-
+<!-- ... existing code ... -->
     <script>
         let availableProducts = [];
+        let activeTab = 'M'; // Solapa activa por defecto: Monedas ('M')
 
         // Función auxiliar para obtener la descripción sin importar problemas de codificación de la tilde
         function getDescripcion(item) {
@@ -117,6 +99,68 @@
             // Busca cualquier clave que empiece con "Descripci"
             const descKey = Object.keys(item).find(k => k.toLowerCase().startsWith('descripci'));
             return descKey ? item[descKey] : 'Sin descripción';
+        }
+
+        // Obtiene el tipo de registro ('M', 'B', etc.) desde FIELD3 o Tipo
+        function getItemType(item) {
+            const rawType = item["FIELD3"] ?? item["Tipo"] ?? item["Categoria"] ?? item["Categoría"] ?? "";
+            return String(rawType).trim().toUpperCase();
+        }
+
+        // Filtra la lista según la pestaña seleccionada
+        function filterByTab(products, tab) {
+            return products.filter(item => {
+                const tipo = getItemType(item);
+                if (tab === 'M') return tipo === 'M';
+                if (tab === 'B') return tipo === 'B';
+                return tipo !== 'M' && tipo !== 'B';
+            });
+        }
+
+        // Actualiza los contadores numéricos de cada solapa
+        function updateTabCounts() {
+            document.getElementById('count-M').textContent = filterByTab(availableProducts, 'M').length;
+            document.getElementById('count-B').textContent = filterByTab(availableProducts, 'B').length;
+            document.getElementById('count-OTROS').textContent = filterByTab(availableProducts, 'OTROS').length;
+        }
+
+        // Cambia la solapa activa y vuelve a aplicar el filtro
+        function selectTab(tab) {
+            activeTab = tab;
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                const isSelected = btn.getAttribute('data-tab') === tab;
+                const badge = btn.querySelector('span:last-child');
+
+                if (isSelected) {
+                    btn.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300', 'font-medium');
+                    btn.classList.add('border-blue-600', 'text-blue-600', 'font-semibold');
+                    badge.classList.remove('bg-gray-200', 'text-gray-700');
+                    badge.classList.add('bg-blue-100', 'text-blue-700');
+                } else {
+                    btn.classList.remove('border-blue-600', 'text-blue-600', 'font-semibold');
+                    btn.classList.add('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300', 'font-medium');
+                    badge.classList.remove('bg-blue-100', 'text-blue-700');
+                    badge.classList.add('bg-gray-200', 'text-gray-700');
+                }
+            });
+
+            applyFilters();
+        }
+
+        // Aplica tanto el filtro de solapa como el de texto de búsqueda
+        function applyFilters() {
+            const term = document.getElementById('searchInput').value.toLowerCase().trim();
+            const byTab = filterByTab(availableProducts, activeTab);
+
+            const filtered = byTab.filter(item => {
+                if (!term) return true;
+                const nroStr = String(item["Nro"] ?? '').toLowerCase();
+                const descStr = String(getDescripcion(item)).toLowerCase();
+                return nroStr.includes(term) || descStr.includes(term);
+            });
+
+            renderProducts(filtered);
         }
 
         // Función para cargar el archivo stock.json
@@ -152,6 +196,8 @@
                     return fechaVenta === undefined || fechaVenta === null || String(fechaVenta).trim() === "";
                 });
 
+                updateTabCounts();
+
                 if (availableProducts.length === 0) {
                     statusEl.textContent = "No hay artículos disponibles en este momento.";
                     return;
@@ -159,7 +205,19 @@
 
                 statusEl.classList.add('hidden');
                 gridEl.classList.remove('hidden');
-                renderProducts(availableProducts);
+
+                // Si no hay monedas disponibles pero sí billetes, abrir automáticamente la solapa que tenga stock
+                if (filterByTab(availableProducts, 'M').length === 0) {
+                    if (filterByTab(availableProducts, 'B').length > 0) {
+                        selectTab('B');
+                        return;
+                    } else if (filterByTab(availableProducts, 'OTROS').length > 0) {
+                        selectTab('OTROS');
+                        return;
+                    }
+                }
+
+                applyFilters();
 
             } catch (error) {
                 console.error("Error cargando el stock:", error);
@@ -176,90 +234,16 @@
             const counterEl = document.getElementById('counterText');
             
             gridEl.innerHTML = '';
-            counterEl.textContent = `Mostrando ${products.length} artículo${products.length === 1 ? '' : 's'} disponible${products.length === 1 ? '' : 's'}`;
+            const tabLabels = { M: 'Monedas', B: 'Billetes', OTROS: 'Otros Coleccionables' };
+            counterEl.textContent = `${tabLabels[activeTab]}: ${products.length} artículo${products.length === 1 ? '' : 's'} disponible${products.length === 1 ? '' : 's'}`;
 
             if (products.length === 0) {
-                gridEl.innerHTML = `<p class="col-span-full text-center text-gray-500 py-8">No se encontraron artículos que coincidan con tu búsqueda.</p>`;
+                gridEl.innerHTML = `<p class="col-span-full text-center text-gray-500 py-8">No se encontraron artículos en esta categoría.</p>`;
                 return;
             }
-
-            products.forEach(item => {
-                const nro = item["Nro"] ?? '';
-                const descripcion = getDescripcion(item);
-                const precio = item["Precio Publicado"] ? String(item["Precio Publicado"]).trim() : '';
-                
-                // Formatear Nro a 6 dígitos con ceros a la izquierda (ej: 72 -> "000072")
-                const nroFormateado = String(nro).trim().padStart(6, '0');
-                const rutaImagen = `img/${nroFormateado}.png`;
-
-                const card = document.createElement('div');
-                card.className = 'product-card bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col justify-between transition-shadow hover:shadow-md';
-                
-                card.innerHTML = `
-                    <div>
-                        <div class="h-48 w-full overflow-hidden bg-gray-100 relative cursor-pointer group" onclick="openModal('${rutaImagen}', '${nro}', '${descripcion.replace(/'/g, "\\'")}', '${precio.replace(/'/g, "\\'")}')">
-                            <img 
-                                src="${rutaImagen}" 
-                                alt="Item #${nro}" 
-                                loading="lazy"
-                                class="w-full h-full object-contain p-2 transition-transform duration-300"
-                                onerror="this.onerror=null; this.src='https://placehold.co/400x300/f3f4f6/9ca3af?text=Sin+Imagen+(${nroFormateado})';"
-                            >
-                            <span class="absolute top-2 left-2 bg-gray-900/80 text-white text-xs font-mono px-2.5 py-1 rounded-md shadow-sm">
-                                #${nro}
-                            </span>
-                            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
-                                <span class="opacity-0 group-hover:opacity-100 bg-white/90 text-gray-800 text-xs font-medium px-2.5 py-1 rounded-full shadow transition-opacity">
-                                    Ampliar
-                                </span>
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <p class="text-gray-800 text-sm font-medium leading-relaxed">${descripcion}</p>
-                        </div>
-                    </div>
-                    <div class="px-4 pb-4 pt-3 border-t border-gray-100 flex items-center justify-between bg-gray-50/50">
-                        <span class="text-xs text-gray-500 font-medium">Precio Publicado</span>
-                        <span class="text-lg font-bold text-blue-600">${precio}</span>
-                    </div>
-                `;
-
-                gridEl.appendChild(card);
-            });
-        }
-
-        // Funciones del visor de imagen ampliada
-        function openModal(imgSrc, nro, desc, price) {
-            document.getElementById('modalImg').src = imgSrc;
-            document.getElementById('modalNro').textContent = `Artículo #${nro}`;
-            document.getElementById('modalDesc').textContent = desc;
-            document.getElementById('modalPrice').textContent = price;
-            const modal = document.getElementById('imageModal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('imageModal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
-
-        // Cerrar modal con tecla Escape
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeModal();
-        });
-
-        // Filtro de búsqueda en tiempo real (busca por Nro o Descripción)
-        document.getElementById('searchInput').addEventListener('input', (e) => {
-            const term = e.target.value.toLowerCase().trim();
-            const filtered = availableProducts.filter(item => {
-                const nroStr = String(item["Nro"] ?? '').toLowerCase();
-                const descStr = String(getDescripcion(item)).toLowerCase();
-                return nroStr.includes(term) || descStr.includes(term);
-            });
-            renderProducts(filtered);
-        });
+// ... existing code ...
+        // Filtro de búsqueda en tiempo real (busca por Nro o Descripción dentro de la solapa activa)
+        document.getElementById('searchInput').addEventListener('input', applyFilters);
 
         // Iniciar al cargar la página
         loadStock();
