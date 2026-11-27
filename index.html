@@ -3,24 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CS Supplies Córdoba</title>
+    <title>Catálogo de Productos</title>
     <!-- Tailwind CSS para un diseño moderno y responsive -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Estilos personalizados suaves */
+        body { font-family: system-ui, -apple-system, sans-serif; }
+        .product-card:hover img { transform: scale(1.03); }
+    </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
 
     <!-- Encabezado y Buscador -->
     <header class="bg-white shadow-sm sticky top-0 z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <img src="logo/CS_Supplies.png" class="logo">
-            <h1>CS Supplies Córdoba</h1>
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Catálogo Disponible</h1>
+                <p id="counterText" class="text-xs text-gray-500 mt-0.5"></p>
+            </div>
             
             <div class="w-full sm:w-80 relative">
                 <input 
                     type="text" 
                     id="searchInput" 
-                    placeholder="Buscar productos..." 
+                    placeholder="Buscar por Nro o descripción..." 
                     class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                 >
                 <svg class="w-5 h-5 text-gray-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -43,13 +49,41 @@
         </div>
     </main>
 
+    <!-- Modal para ver imagen en grande -->
+    <div id="imageModal" class="fixed inset-0 bg-black/80 z-50 hidden items-center justify-center p-4" onclick="closeModal()">
+        <div class="relative max-w-4xl w-full bg-white rounded-xl overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
+            <button onclick="closeModal()" class="absolute top-3 right-3 bg-white/90 hover:bg-white text-gray-800 rounded-full p-2 shadow-md transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div class="bg-gray-100 flex items-center justify-center max-h-[75vh] overflow-hidden">
+                <img id="modalImg" src="" alt="Vista ampliada" class="max-h-[75vh] w-auto object-contain">
+            </div>
+            <div class="p-4 bg-white flex justify-between items-center gap-4">
+                <div>
+                    <span id="modalNro" class="text-xs font-bold uppercase tracking-wider text-blue-600"></span>
+                    <p id="modalDesc" class="text-gray-900 font-medium text-sm sm:text-base"></p>
+                </div>
+                <span id="modalPrice" class="text-xl font-bold text-gray-900 whitespace-nowrap"></span>
+            </div>
+        </div>
+    </div>
+
     <!-- Pie de página -->
     <footer class="bg-white border-t border-gray-200 mt-12 py-6 text-center text-sm text-gray-500">
         Actualizado automáticamente desde nuestro inventario.
     </footer>
 
     <script>
-        let allProducts = [];
+        let availableProducts = [];
+
+        // Función auxiliar para obtener la descripción sin importar problemas de codificación de la tilde
+        function getDescripcion(item) {
+            if (item["Descripción"] !== undefined) return item["Descripción"];
+            if (item["Descripci\ufffdn"] !== undefined) return item["Descripci\ufffdn"];
+            // Busca cualquier clave que empiece con "Descripci"
+            const descKey = Object.keys(item).find(k => k.toLowerCase().startsWith('descripci'));
+            return descKey ? item[descKey] : 'Sin descripción';
+        }
 
         // Función para cargar el archivo stock.json
         async function loadStock() {
@@ -57,32 +91,47 @@
             const gridEl = document.getElementById('productGrid');
 
             try {
-                // Agregamos un timestamp (?v=...) para evitar que el navegador guarde en caché una versión vieja del JSON
+                // Agregamos un timestamp (?v=...) para evitar caché vieja del navegador
                 const response = await fetch(`stock.json?v=${new Date().getTime()}`);
                 
                 if (!response.ok) {
                     throw new Error(`No se pudo cargar stock.json (Error ${response.status})`);
                 }
 
-                const data = await response.json();
-                
-                // Soporta tanto si el JSON es una lista directa [...] como si viene dentro de un objeto {"productos": [...]}
-                allProducts = Array.isArray(data) ? data : (data.productos || data.items || data.stock || Object.values(data)[0]);
+                // Leemos como ArrayBuffer para manejar tanto UTF-8 como Windows-1252 (acentos de Excel/CSV)
+                const buffer = await response.arrayBuffer();
+                let text = new TextDecoder('utf-8').decode(buffer);
+                if (text.includes('\ufffd')) {
+                    text = new TextDecoder('windows-1252').decode(buffer);
+                }
 
-                if (!Array.isArray(allProducts) || allProducts.length === 0) {
-                    statusEl.textContent = "No hay productos disponibles en este momento.";
+                const data = JSON.parse(text);
+                const rawList = Array.isArray(data) ? data : (data.productos || data.items || data.stock || Object.values(data)[0]);
+
+                if (!Array.isArray(rawList)) {
+                    throw new Error("El formato de stock.json no es una lista válida.");
+                }
+
+                // FILTRO PRINCIPAL: Solo mostrar cuando "Fecha Venta" esté vacío
+                availableProducts = rawList.filter(item => {
+                    const fechaVenta = item["Fecha Venta"];
+                    return fechaVenta === undefined || fechaVenta === null || String(fechaVenta).trim() === "";
+                });
+
+                if (availableProducts.length === 0) {
+                    statusEl.textContent = "No hay artículos disponibles en este momento.";
                     return;
                 }
 
                 statusEl.classList.add('hidden');
                 gridEl.classList.remove('hidden');
-                renderProducts(allProducts);
+                renderProducts(availableProducts);
 
             } catch (error) {
                 console.error("Error cargando el stock:", error);
                 statusEl.innerHTML = `
                     <p class="text-red-500 font-semibold">Error al cargar el inventario.</p>
-                    <p class="text-xs mt-1">Asegúrate de que 'stock.json' esté en la misma carpeta que 'index.html' y tenga un formato válido.</p>
+                    <p class="text-xs mt-1">Verifica que 'stock.json' esté en la raíz del repositorio y sea un JSON válido.</p>
                 `;
             }
         }
@@ -90,60 +139,54 @@
         // Función para dibujar las tarjetas en pantalla
         function renderProducts(products) {
             const gridEl = document.getElementById('productGrid');
+            const counterEl = document.getElementById('counterText');
+            
             gridEl.innerHTML = '';
+            counterEl.textContent = `Mostrando ${products.length} artículo${products.length === 1 ? '' : 's'} disponible${products.length === 1 ? '' : 's'}`;
 
             if (products.length === 0) {
-                gridEl.innerHTML = `<p class="col-span-full text-center text-gray-500 py-8">No se encontraron productos que coincidan con tu búsqueda.</p>`;
+                gridEl.innerHTML = `<p class="col-span-full text-center text-gray-500 py-8">No se encontraron artículos que coincidan con tu búsqueda.</p>`;
                 return;
             }
 
             products.forEach(item => {
-                // Adaptador inteligente de nombres de campos comunes en español/inglés
-                const nombre = item.nombre || item.name || item.titulo || item.producto || 'Producto sin nombre';
-                const precio = item.precio || item.price || item.valor || '';
-                const imagen = item.imagen || item.image || item.img || item.foto || 'https://via.placeholder.com/400x300?text=Sin+Imagen';
-                const stock = item.stock ?? item.cantidad ?? item.disponible ?? null;
-                const descripcion = item.descripcion || item.description || item.detalle || '';
-
-                // Determinar estado del stock
-                let stockBadge = '';
-                if (stock !== null) {
-                    if (Number(stock) > 0 || stock === true) {
-                        const textoStock = typeof stock === 'number' ? `Stock: ${stock}` : 'Disponible';
-                        stockBadge = `<span class="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full font-medium">${textoStock}</span>`;
-                    } else {
-                        stockBadge = `<span class="inline-block bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full font-medium">Sin stock</span>`;
-                    }
-                }
-
-                // Formatear precio si es numérico
-                const precioFormateado = precio !== '' 
-                    ? (isNaN(precio) ? precio : `$${Number(precio).toLocaleString('es-AR')}`) 
-                    : '';
+                const nro = item["Nro"] ?? '';
+                const descripcion = getDescripcion(item);
+                const precio = item["Precio Publicado"] ? String(item["Precio Publicado"]).trim() : '';
+                
+                // Formatear Nro a 6 dígitos con ceros a la izquierda (ej: 72 -> "000072")
+                const nroFormateado = String(nro).trim().padStart(6, '0');
+                const rutaImagen = `img/${nroFormateado}.png`;
 
                 const card = document.createElement('div');
-                card.className = 'product-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col justify-between transition-shadow hover:shadow-md';
+                card.className = 'product-card bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col justify-between transition-shadow hover:shadow-md';
                 
                 card.innerHTML = `
                     <div>
-                        <div class="h-48 w-full overflow-hidden bg-gray-100 relative">
+                        <div class="h-48 w-full overflow-hidden bg-gray-100 relative cursor-pointer group" onclick="openModal('${rutaImagen}', '${nro}', '${descripcion.replace(/'/g, "\\'")}', '${precio.replace(/'/g, "\\'")}')">
                             <img 
-                                src="${imagen}" 
-                                alt="${nombre}" 
-                                class="w-full h-full object-cover transition-transform duration-300"
-                                onerror="this.src='https://via.placeholder.com/400x300?text=Imagen+no+encontrada'"
+                                src="${rutaImagen}" 
+                                alt="Item #${nro}" 
+                                loading="lazy"
+                                class="w-full h-full object-contain p-2 transition-transform duration-300"
+                                onerror="this.onerror=null; this.src='https://placehold.co/400x300/f3f4f6/9ca3af?text=Sin+Imagen+(${nroFormateado})';"
                             >
+                            <span class="absolute top-2 left-2 bg-gray-900/80 text-white text-xs font-mono px-2.5 py-1 rounded-md shadow-sm">
+                                #${nro}
+                            </span>
+                            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                                <span class="opacity-0 group-hover:opacity-100 bg-white/90 text-gray-800 text-xs font-medium px-2.5 py-1 rounded-full shadow transition-opacity">
+                                    Ampliar
+                                </span>
+                            </div>
                         </div>
                         <div class="p-4">
-                            <div class="flex justify-between items-start gap-2 mb-2">
-                                <h2 class="font-semibold text-gray-900 text-lg leading-snug">${nombre}</h2>
-                            </div>
-                            ${descripcion ? `<p class="text-gray-500 text-sm line-clamp-2 mb-3">${descripcion}</p>` : ''}
+                            <p class="text-gray-800 text-sm font-medium leading-relaxed">${descripcion}</p>
                         </div>
                     </div>
-                    <div class="px-4 pb-4 pt-2 border-t border-gray-50 flex items-center justify-between">
-                        <span class="text-xl font-bold text-blue-600">${precioFormateado}</span>
-                        ${stockBadge}
+                    <div class="px-4 pb-4 pt-3 border-t border-gray-100 flex items-center justify-between bg-gray-50/50">
+                        <span class="text-xs text-gray-500 font-medium">Precio Publicado</span>
+                        <span class="text-lg font-bold text-blue-600">${precio}</span>
                     </div>
                 `;
 
@@ -151,12 +194,35 @@
             });
         }
 
-        // Filtro de búsqueda en tiempo real
+        // Funciones del visor de imagen ampliada
+        function openModal(imgSrc, nro, desc, price) {
+            document.getElementById('modalImg').src = imgSrc;
+            document.getElementById('modalNro').textContent = `Artículo #${nro}`;
+            document.getElementById('modalDesc').textContent = desc;
+            document.getElementById('modalPrice').textContent = price;
+            const modal = document.getElementById('imageModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // Cerrar modal con tecla Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // Filtro de búsqueda en tiempo real (busca por Nro o Descripción)
         document.getElementById('searchInput').addEventListener('input', (e) => {
-            const term = e.target.value.toLowerCase();
-            const filtered = allProducts.filter(item => {
-                const text = JSON.stringify(item).toLowerCase();
-                return text.includes(term);
+            const term = e.target.value.toLowerCase().trim();
+            const filtered = availableProducts.filter(item => {
+                const nroStr = String(item["Nro"] ?? '').toLowerCase();
+                const descStr = String(getDescripcion(item)).toLowerCase();
+                return nroStr.includes(term) || descStr.includes(term);
             });
             renderProducts(filtered);
         });
