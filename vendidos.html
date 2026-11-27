@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lotes Vendidos - CS_Supplies Córdoba</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: system-ui, -apple-system, sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 flex flex-col min-h-screen">
+
+    <!-- PANTALLA DE BLOQUEO POR CONTRASEÑA -->
+    <div id="loginScreen" class="fixed inset-0 bg-gray-900/95 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 sm:p-8">
+            <div class="flex flex-col items-center text-center mb-6">
+                <img 
+                    src="logo/CS_Supplies.png" 
+                    alt="Logo CS_Supplies" 
+                    class="h-14 w-auto object-contain mb-3"
+                    onerror="this.style.display='none'"
+                >
+                <h2 class="text-xl font-bold text-gray-900">Acceso Restringido</h2>
+                <p class="text-sm text-gray-500 mt-1">Ingresa la contraseña para ver el historial de ventas</p>
+            </div>
+
+            <form id="loginForm" class="space-y-4">
+                <div>
+                    <label for="passwordInput" class="block text-xs font-semibold uppercase tracking-wider text-gray-600 mb-1">
+                        Contraseña
+                    </label>
+                    <input 
+                        type="password" 
+                        id="passwordInput" 
+                        required
+                        placeholder="••••••••"
+                        class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 text-gray-900"
+                    >
+                </div>
+                <p id="loginError" class="text-red-600 text-xs font-medium hidden">
+                    Contraseña incorrecta. Intenta nuevamente.
+                </p>
+                <button 
+                    type="submit" 
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-lg shadow-sm transition-colors"
+                >
+                    Ingresar
+                </button>
+            </form>
+
+            <div class="mt-6 text-center">
+                <a href="index.html" class="text-xs text-gray-500 hover:text-gray-800 underline">
+                    ← Volver al catálogo público
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTENIDO PRIVADO (Oculto hasta validar contraseña) -->
+    <div id="adminContent" class="hidden flex-col min-h-screen">
+        
+        <!-- Encabezado -->
+        <header class="bg-white shadow-sm sticky top-0 z-10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="flex items-center gap-3">
+                    <a href="index.html" class="shrink-0">
+                        <img 
+                            src="logo/CS_Supplies.png" 
+                            alt="Logo CS_Supplies" 
+                            class="h-12 w-auto object-contain rounded-lg"
+                            onerror="this.style.display='none'"
+                        >
+                    </a>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Historial de Ventas</h1>
+                            <span class="bg-amber-100 text-amber-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">Admin</span>
+                        </div>
+                        <p class="text-sm text-gray-500">CS_Supplies - Córdoba</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3 w-full md:w-auto justify-end">
+                    <a 
+                        href="index.html" 
+                        class="text-sm font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 px-4 py-2 rounded-lg transition-colors"
+                    >
+                        ← Catálogo Público
+                    </a>
+                    <button 
+                        onclick="logout()" 
+                        class="text-sm font-medium text-gray-600 hover:text-red-600 bg-gray-100 hover:bg-red-50 px-3 py-2 rounded-lg transition-colors"
+                        title="Cerrar sesión"
+                    >
+                        Bloquear
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Panel de Filtros y Resumen Financiero -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full space-y-6">
+            
+            <!-- Tarjetas de Resumen y Filtro -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+                <!-- Filtro por Comprador y Búsqueda -->
+                <div class="lg:col-span-6 bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex flex-col sm:flex-row gap-3 items-end">
+                    <div class="w-full sm:w-1/2">
+                        <label for="buyerFilter" class="block text-xs font-semibold text-gray-600 uppercase tracking-wider mb-1">
+                            Filtrar por Comprador
+                        </label>
+                        <select 
+                            id="buyerFilter" 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                            <option value="">Todos los compradores</option>
+                        </select>
+                    </div>
+                    <div class="w-full sm:w-1/2">
+                        <label for="textFilter" class="block text-xs font-semibold text-gray-600 uppercase tracking-wider mb-1">
+                            Buscar Lote / Texto
+                        </label>
+                        <input 
+                            type="text" 
+                            id="textFilter" 
+                            placeholder="Nro, descripción, fecha..." 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                    </div>
+                </div>
+
+                <!-- KPIs / Totales -->
+                <div class="lg:col-span-6 grid grid-cols-3 gap-3">
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex flex-col justify-center">
+                        <span class="text-xs font-medium text-gray-500">Lotes Vendidos</span>
+                        <span id="totalCount" class="text-xl sm:text-2xl font-bold text-gray-900 mt-1">0</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex flex-col justify-center">
+                        <span class="text-xs font-medium text-gray-500">Total Vendido</span>
+                        <span id="totalSoldAmount" class="text-xl sm:text-2xl font-bold text-green-600 mt-1">$0,00</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex flex-col justify-center">
+                        <span class="text-xs font-medium text-gray-500">Ganancia Total</span>
+                        <span id="totalProfitAmount" class="text-xl sm:text-2xl font-bold text-blue-600 mt-1">$0,00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Estado de carga -->
+            <div id="statusMessage" class="text-center py-12 text-gray-500 bg-white rounded-xl border border-gray-200">
+                Cargando historial de ventas...
+            </div>
+
+            <!-- Tabla completa con todos los campos del JSON -->
+            <div id="tableWrapper" class="hidden bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200 text-xs sm:text-sm">
+                        <thead class="bg-gray-50 text-gray-700 font-semibold">
+                            <tr id="tableHeaderRow">
+                                <!-- Se genera dinámicamente con todas las columnas del JSON -->
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody" class="divide-y divide-gray-200 bg-white">
+                            <!-- Filas generadas con JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+        <!-- Modal para ampliar foto miniatura -->
+        <div id="imageModal" class="fixed inset-0 bg-black/80 z-50 hidden items-center justify-center p-4" onclick="closeModal()">
+            <div class="relative max-w-3xl w-full bg-white rounded-xl overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
+                <button onclick="closeModal()" aria-label="Cerrar" class="absolute top-3 right-3 bg-gray-900/75 hover:bg-gray-900 text-white rounded-full p-2 transition-colors z-10">
+                    <svg class="w-5 h-5" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+                <div class="bg-gray-100 flex items-center justify-center p-4 max-h-[80vh]">
+                    <img id="modalImg" src="" alt="Vista ampliada" class="max-h-[75vh] w-auto object-contain">
+                </div>
+                <div id="modalCaption" class="p-3 bg-white text-center text-sm font-medium text-gray-800 border-t"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // =========================================================================
+        // CONFIGURACIÓN DE CONTRASEÑA
+        // Cambia el valor de ADMIN_PASS por la contraseña que prefieras usar
+        // =========================================================================
+        const ADMIN_PASS = "cordoba2026";
+
+        let soldProducts = [];
+        let allColumns = [];
+
+        // Gestión de sesión simple en el navegador (sessionStorage)
+        function checkAuth() {
+            if (sessionStorage.getItem('cs_admin_auth') === 'true') {
+                document.getElementById('loginScreen').classList.add('hidden');
+                const adminContent = document.getElementById('adminContent');
+                adminContent.classList.remove('hidden');
+                adminContent.classList.add('flex');
+                loadSoldStock();
+            }
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const input = document.getElementById('passwordInput').value;
+            const errorEl = document.getElementById('loginError');
+
+            if (input === ADMIN_PASS) {
+                sessionStorage.setItem('cs_admin_auth', 'true');
+                errorEl.classList.add('hidden');
+                checkAuth();
+            } else {
+                errorEl.classList.remove('hidden');
+                document.getElementById('passwordInput').value = '';
+                document.getElementById('passwordInput').focus();
+            }
+        });
+
+        function logout() {
+            sessionStorage.removeItem('cs_admin_auth');
+            location.reload();
+        }
+
+        // Convierte strings como " $0,53 " o "$ 1.250,50" a número flotante para sumar
+        function parseCurrency(value) {
+            if (value === undefined || value === null) return 0;
+            if (typeof value === 'number') return value;
+            
+            let str = String(value).replace(/[^0-9,.-]/g, '').trim();
+            if (!str || str === '-') return 0;
+
+            // Si tiene coma como decimal (formato Argentina/Europa ej: 1.250,50 o 0,53)
+            if (str.includes(',') && str.includes('.')) {
+                str = str.replace(/\./g, '').replace(',', '.');
+            } else if (str.includes(',')) {
+                str = str.replace(',', '.');
+            }
+
+            const num = parseFloat(str);
+            return isNaN(num) ? 0 : num;
+        }
+
+        // Formatea número a moneda legible ($ 1.234,56)
+        function formatCurrency(num) {
+            return '$ ' + num.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        // Normaliza el nombre de la columna Descripción si viene con símbolo roto
+        function formatColumnHeader(key) {
+            if (key.toLowerCase().startsWith('descripci')) return 'Descripción';
+            return key;
+        }
+
+        async function loadSoldStock() {
+            const statusEl = document.getElementById('statusMessage');
+            const tableWrapper = document.getElementById('tableWrapper');
+
+            try {
+                const response = await fetch(`stock.json?v=${new Date().getTime()}`);
+                if (!response.ok) throw new Error(`Error ${response.status}`);
+
+                const buffer = await response.arrayBuffer();
+                let text = new TextDecoder('utf-8').decode(buffer);
+                if (text.includes('\ufffd')) {
+                    text = new TextDecoder('windows-1252').decode(buffer);
+                }
+
+                const data = JSON.parse(text);
+                const rawList = Array.isArray(data) ? data : (data.productos || data.items || data.stock || Object.values(data)[0]);
+
+                // FILTRO: Solo lotes que SÍ tengan cargada una Fecha Venta
+                soldProducts = rawList.filter(item => {
+                    const fechaVenta = item["Fecha Venta"];
+                    return fechaVenta !== undefined && fechaVenta !== null && String(fechaVenta).trim() !== "";
+                });
+
+                if (soldProducts.length === 0) {
+                    statusEl.textContent = "Aún no hay lotes registrados con Fecha de Venta.";
+                    return;
+                }
+
+                // Obtener todas las claves/columnas presentes en los objetos del JSON
+                const keySet = new Set();
+                soldProducts.forEach(item => Object.keys(item).forEach(k => keySet.add(k)));
+                allColumns = Array.from(keySet);
+
+                // Construir cabecera de la tabla (Foto + todas las claves del JSON)
+                const headerRow = document.getElementById('tableHeaderRow');
+                headerRow.innerHTML = `<th class="px-3 py-3 text-left whitespace-nowrap sticky left-0 bg-gray-50 z-10">Foto</th>`;
+                allColumns.forEach(col => {
+                    headerRow.innerHTML += `<th class="px-3 py-3 text-left whitespace-nowrap">${formatColumnHeader(col)}</th>`;
+                });
+
+                populateBuyerFilter();
+                statusEl.classList.add('hidden');
+                tableWrapper.classList.remove('hidden');
+                applyFilters();
+
+            } catch (err) {
+                console.error(err);
+                statusEl.innerHTML = `<p class="text-red-600 font-semibold">No se pudo cargar stock.json</p>`;
+            }
+        }
+
+        // Llena el desplegable de compradores únicos ordenados alfabéticamente
+        function populateBuyerFilter() {
+            const select = document.getElementById('buyerFilter');
+            const buyers = new Set();
+
+            soldProducts.forEach(item => {
+                const buyer = (item["Comprador"] || "").trim();
+                if (buyer) buyers.add(buyer);
+            });
+
+            Array.from(buyers).sort((a, b) => a.localeCompare(b)).forEach(buyer => {
+                const option = document.createElement('option');
+                option.value = buyer;
+                option.textContent = buyer;
+                select.appendChild(option);
+            });
+        }
+
+        // Aplica filtro por comprador y texto libre, y recalcula totales
+        function applyFilters() {
+            const selectedBuyer = document.getElementById('buyerFilter').value;
+            const searchTerm = document.getElementById('textFilter').value.toLowerCase().trim();
+
+            const filtered = soldProducts.filter(item => {
+                const itemBuyer = (item["Comprador"] || "").trim();
+                const matchesBuyer = !selectedBuyer || itemBuyer === selectedBuyer;
+
+                if (!matchesBuyer) return false;
+                if (!searchTerm) return true;
+
+                // Busca coincidencia en cualquier campo del JSON
+                return Object.values(item).some(val => 
+                    String(val ?? '').toLowerCase().includes(searchTerm)
+                );
+            });
+
+            renderTable(filtered);
+            updateTotals(filtered);
+        }
+
+        function updateTotals(list) {
+            let totalSold = 0;
+            let totalProfit = 0;
+
+            list.forEach(item => {
+                totalSold += parseCurrency(item["Precio Venta"]);
+                totalProfit += parseCurrency(item["Ganancia"]);
+            });
+
+            document.getElementById('totalCount').textContent = list.length;
+            document.getElementById('totalSoldAmount').textContent = formatCurrency(totalSold);
+            document.getElementById('totalProfitAmount').textContent = formatCurrency(totalProfit);
+        }
+
+        function renderTable(list) {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            if (list.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="${allColumns.length + 1}" class="px-4 py-8 text-center text-gray-500">No se encontraron ventas con los filtros seleccionados.</td></tr>`;
+                return;
+            }
+
+            list.forEach(item => {
+                const nro = item["Nro"] ?? '';
+                const nroFormateado = String(nro).trim().padStart(6, '0');
+                const rutaImagen = `img/${nroFormateado}.png`;
+                const descKey = allColumns.find(k => k.toLowerCase().startsWith('descripci'));
+                const desc = descKey ? (item[descKey] || '') : '';
+
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-blue-50/40 transition-colors';
+
+                // Celda de foto miniatura
+                let rowHtml = `
+                    <td class="px-3 py-2 whitespace-nowrap sticky left-0 bg-white">
+                        <img 
+                            src="${rutaImagen}" 
+                            alt="#${nro}" 
+                            loading="lazy"
+                            onclick="openModal('${rutaImagen}', 'Lote #${nro} - ${String(desc).replace(/'/g, "\\'")}')"
+                            class="w-14 h-10 object-contain bg-gray-100 rounded border border-gray-200 cursor-pointer hover:scale-110 transition-transform"
+                            onerror="this.onerror=null; this.src='https://placehold.co/80x60/f3f4f6/9ca3af?text=${nroFormateado}';"
+                        >
+                    </td>
+                `;
+
+                // Celdas con absolutamente todos los datos del JSON
+                allColumns.forEach(col => {
+                    const val = item[col] !== undefined && item[col] !== null ? String(item[col]).trim() : '';
+                    let cellClass = "px-3 py-2 whitespace-nowrap text-gray-700";
+
+                    if (col === "Nro") cellClass += " font-bold text-gray-900";
+                    if (col === "Precio Venta") cellClass += " font-bold text-green-700";
+                    if (col === "Ganancia") cellClass += " font-semibold text-blue-700";
+                    if (col === "Comprador") cellClass += " font-medium text-gray-900";
+                    if (col.toLowerCase().startsWith('descripci')) {
+                        cellClass = "px-3 py-2 min-w-[220px] max-w-xs text-gray-800";
+                    }
+
+                    rowHtml += `<td class="${cellClass}">${val || '<span class="text-gray-300">-</span>'}</td>`;
+                });
+
+                tr.innerHTML = rowHtml;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function openModal(imgSrc, caption) {
+            document.getElementById('modalImg').src = imgSrc;
+            document.getElementById('modalCaption').textContent = caption;
+            const modal = document.getElementById('imageModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        document.getElementById('buyerFilter').addEventListener('change', applyFilters);
+        document.getElementById('textFilter').addEventListener('input', applyFilters);
+
+        // Verificar si ya inició sesión al cargar
+        checkAuth();
+    </script>
+</body>
+</html>
