@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acerca de mí - CS_Supplies Córdoba</title>
+    <!-- Tailwind CSS para mantener exactamente el mismo estilo que index.html -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: system-ui, -apple-system, sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
+
+    <!-- Encabezado consistente con el catálogo -->
+    <header class="bg-white shadow-sm sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3 text-center md:text-left">
+                <a href="index.html" class="shrink-0">
+                    <img 
+                        src="logo/CS_Supplies.png" 
+                        alt="Logo CS_Supplies" 
+                        class="h-12 w-auto object-contain rounded-lg"
+                        onerror="this.style.display='none'"
+                    >
+                </a>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-bold text-gray-900">CS_Supplies - Córdoba</h1>
+                    <p class="text-sm text-gray-500">Numismática, Notafilia y Coleccionismo</p>
+                </div>
+            </div>
+            
+            <!-- Navegación y Contacto -->
+            <div class="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
+                <a 
+                    href="index.html" 
+                    class="w-full sm:w-auto text-center text-sm font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 px-4 py-2 rounded-lg transition-colors whitespace-nowrap"
+                >
+                    ← Volver al Catálogo
+                </a>
+
+                <a 
+                    href="https://wa.me/5493513998168?text=Buenos%20dias%2C%20me%20interesa%20hacer%20una%20consulta" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium px-4 py-2 rounded-lg shadow-sm transition-colors whitespace-nowrap"
+                >
+                    <svg class="w-5 h-5 fill-current shrink-0" width="20" height="20" viewBox="0 0 24 24">
+                        <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm.029 18.88c-1.161 0-2.305-.292-3.318-.844l-3.677.964.984-3.595c-.607-1.052-.927-2.246-.926-3.468.001-3.825 3.113-6.937 6.937-6.937 1.856.001 3.598.723 4.907 2.034 1.31 1.311 2.031 3.054 2.03 4.908-.001 3.825-3.113 6.938-6.937 6.938z"/>
+                    </svg>
+                    <span>Contactar</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-grow w-full">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+            <!-- Banner superior decorativo -->
+            <div class="bg-gradient-to-r from-blue-600 to-blue-800 px-6 py-8 sm:px-10 text-white">
+                <h2 class="text-2xl sm:text-3xl font-bold">Acerca de CS_Supplies</h2>
+                <p class="mt-2 text-blue-100 text-sm sm:text-base">Pasión por el coleccionismo desde Córdoba, Argentina.</p>
+            </div>
+
+            <!-- Cuerpo de presentación -->
+            <div class="p-6 sm:p-10 space-y-6 text-gray-700 leading-relaxed">
+                <section class="space-y-3">
+                    <h3 class="text-lg font-bold text-gray-900">¿Quiénes somos?</h3>
+                    <p>
+                        ¡Hola! Bienvenido a <strong>CS_Supplies</strong>. Mi nombre es Pablo Martin, soy coleccionista de monedas mundiales del siglo XX por tipo. También colecciono tapas coronas y algunas cositas más.
+                    </p>
+                    <p>
+                        Este espacio nació con el objetivo de poder vender algunos coleccionables que me sobran y así poder cubrir los gastos de mi propia colección.
+                    </p>
+                    <p>
+                        Cada lote publicado en nuestro catálogo cuenta con fotografías reales y detalladas del ejemplar exacto que vas a recibir, garantizando transparencia y confianza en cada operación.
+                    </p>
+                </section>
+
+                <!-- Tarjetas informativas -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                    <div class="bg-gray-50 p-5 rounded-xl border border-gray-100">
+                        <h4 class="font-bold text-gray-900 mb-2 flex items-center gap-2">
+                            <span class="text-blue-600">📍</span> Ubicación y Entregas
+                        </h4>
+                        <p class="text-sm text-gray-600">
+                            Nos encontramos en <strong>Córdoba Capital</strong>. Realizamos entregas personales a coordinar y envíos seguros a todo el país a cargo y riesgo del comprador.
+                        </p>
+                    </div>
+
+                    <div class="bg-gray-50 p-5 rounded-xl border border-gray-100">
+                        <h4 class="font-bold text-gray-900 mb-2 flex items-center gap-2">
+                            <span class="text-green-600">💬</span> Impresiones 3D personalizadas
+                        </h4>
+                        <p class="text-sm text-gray-600">
+                            También hago impresiones 3D personalizadas y a medida para poder organizar y exhibir tu coleccion. Consultame y diseñamos lo que necesites.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Llamado a la acción -->
+                <div class="pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <p class="text-sm text-gray-500">¿Querés explorar los lotes disponibles hoy?</p>
+                    <a 
+                        href="index.html" 
+                        class="w-full sm:w-auto text-center bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm px-6 py-2.5 rounded-lg shadow-sm transition-colors"
+                    >
+                        Ver Catálogo Disponible
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Pie de página -->
+    <footer class="bg-white border-t border-gray-200 mt-12 py-6 text-center text-sm text-gray-500">
+        CS_Supplies - Córdoba, Argentina.
+    </footer>
+
+</body>
+</html>
