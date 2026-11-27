@@ -13,56 +13,59 @@ const buscador = document.getElementById("buscar");\
 let productos = [];\
 \
 async function cargarDatos() \{\
+\'a0\'a0\'a0 try \{\
+\'a0\'a0\'a0\'a0\'a0\'a0\'a0 const response = await fetch("stock.json");\
 \
-\'a0\'a0\'a0 const response = await fetch("stock.csv");\
-\'a0\'a0\'a0 const texto = await response.text();\
+\'a0\'a0\'a0\'a0\'a0\'a0\'a0 if (!response.ok) \{\
+\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0 throw new Error(`Error cargando stock.json: $\{response.status\}`);\
+\'a0\'a0\'a0\'a0\'a0\'a0\'a0 \}\
 \
-\'a0\'a0\'a0 const filas = texto.split("\\n").slice(1);\
+\'a0\'a0\'a0\'a0\'a0\'a0\'a0 productos = await response.json();\
 \
-\'a0\'a0\'a0 productos = filas\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0 .map(fila => fila.split(","))\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0 .map(item => (\{\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0 codigo: item[0],\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0 descripcion: item[1],\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0 precio: item[2],\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0 vendido: item[3] || ""\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0 \}))\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0 .filter(item => item.vendido.trim() === "");\
+\'a0\'a0\'a0\'a0\'a0\'a0\'a0 renderizar(productos);\
 \
-\'a0\'a0\'a0 renderizar(productos);\
+\'a0\'a0\'a0 \} catch (error) \{\
+\'a0\'a0\'a0\'a0\'a0\'a0\'a0 console.error(error);\
+\
+\'a0\'a0\'a0\'a0\'a0\'a0\'a0 contenedor.innerHTML = `\
+\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0 <p style="color:red; text-align:center;">\
+\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0 Error al cargar el cat\'e1logo.\
+\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0 </p>\
+\'a0\'a0\'a0\'a0\'a0\'a0\'a0 `;\
+\'a0\'a0\'a0 \}\
 \}\
 \
-function renderizar(lista)\{\
+function renderizar(lista) \{\
 \
 \'a0\'a0\'a0 contenedor.innerHTML = "";\
 \
 \'a0\'a0\'a0 lista.forEach(item => \{\
 \
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0 const codigo6 = item.codigo.padStart(6,"0");\
+\'a0\'a0\'a0\'a0\'a0\'a0\'a0 const codigo = String(item.codigo);\
 \
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0 const imagen =\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0 `https://TU_RUTA_PUBLICA_DE_ONEDRIVE/$\{codigo6\}.png`;\
+\'a0\'a0\'a0\'a0\'a0\'a0\'a0 // Convierte 173 -> 000173\
+\'a0\'a0\'a0\'a0\'a0\'a0\'a0 const codigoImagen = codigo.padStart(6, "0");\
+\
+\'a0\'a0\'a0\'a0\'a0\'a0\'a0 const imagen = `img/$\{codigoImagen\}.png`;\
 \
 \'a0\'a0\'a0\'a0\'a0\'a0\'a0 const whatsapp =\
 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0 `https://wa.me/5493513998168?text=$\{encodeURIComponent(\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0 "Hola, me interesa el art\'edculo " +\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0 item.codigo +\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0 " - " +\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0 item.descripcion\
+\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0 `Hola, me interesa el art\'edculo $\{codigo\} - $\{item.descripcion\}`\
 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0 )\}`;\
 \
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0 contenedor.innerHTML += `\
+\'a0\'a0\'a0\'a0\'a0\'a0\'a0 const card = document.createElement("div");\
+\'a0\'a0\'a0\'a0\'a0\'a0\'a0 card.className = "card";\
 \
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0 <div class="card">\
-\
+\'a0\'a0\'a0\'a0\'a0\'a0\'a0 card.innerHTML = `\
 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0 <img\
 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0 src="$\{imagen\}"\
+\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0 alt="$\{item.descripcion\}"\
 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0 onerror="this.src='img/sin-imagen.png'"\
 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0 >\
 \
 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0 <div class="card-info">\
 \
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0 <h3>C\'f3digo $\{item.codigo\}</h3>\
+\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0 <h3>C\'f3digo $\{codigo\}</h3>\
 \
 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0 <p>$\{item.descripcion\}</p>\
 \
@@ -79,25 +82,23 @@ function renderizar(lista)\{\
 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0 </a>\
 \
 \'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0\'a0 </div>\
-\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0 </div>\
-\
 \'a0\'a0\'a0\'a0\'a0\'a0\'a0 `;\
+\
+\'a0\'a0\'a0\'a0\'a0\'a0\'a0 contenedor.appendChild(card);\
 \'a0\'a0\'a0 \});\
 \}\
 \
-buscador.addEventListener("input", ()=>\{\
+buscador.addEventListener("input", () => \{\
 \
 \'a0\'a0\'a0 const texto = buscador.value.toLowerCase();\
 \
 \'a0\'a0\'a0 const filtrados = productos.filter(item =>\
-\'a0\'a0\'a0\'a0\'a0\'a0\'a0 item.codigo.toLowerCase().includes(texto)\
+\'a0\'a0\'a0\'a0\'a0\'a0\'a0 String(item.codigo).toLowerCase().includes(texto)\
 \'a0\'a0\'a0\'a0\'a0\'a0\'a0 ||\
 \'a0\'a0\'a0\'a0\'a0\'a0\'a0 item.descripcion.toLowerCase().includes(texto)\
 \'a0\'a0\'a0 );\
 \
 \'a0\'a0\'a0 renderizar(filtrados);\
-\
 \});\
 \
 cargarDatos();\
